@@ -15,4 +15,4 @@ CMD [ "node", "./app/index.js" ]
 
 # ms_pb is temporary because when the website has the domain, it should be domain instead of ms_pb
 # example. PUBLIC_PB_URI=https://pb.michaelsantiago.ca
-# or else, to eliminate the round trip from the DNS, find a way to read data on the servide only (always)
+# or else, to eliminate the round trip from the DNS, find a way to read data on the serverside only (always)
