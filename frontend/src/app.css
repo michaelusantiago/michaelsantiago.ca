@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @custom-selector :--heading h1, h2, h3, h4, h5, h6;
+
+:--heading {
+    font-size: 1.5rem;
+} */
+
+html { scroll-behavior: smooth; }
+
+:root {
+    --theme-bg: #FFF;
+    --navbar-bg: #FFF;
+}
+
+body { background-color: var(--theme-bg); }
+
+/* It's important that this come's first before dark-theme declaration below since page start at light
+ * then just toggle on and off in dark
+ */
+.light-theme {
+    background-color: white;
+    /* transition: background-color ease-in 0.3s; */
+    color: black;
+    .modal-window, textarea, input { color: black; }
+    nav {
+        /* background-image: linear-gradient(#BEE1FF, #33A2FFDD); */
+        /* background-image: linear-gradient(#F4F6F7, #E6E8E9DD); */
+        /* background-image: linear-gradient(#F4F6F7, #D8D8DCDD); */
+        /* background-image: linear-gradient(#F4F6F7, #C2C5C6DD); */
+        color: #222;
+        /* box-shadow: 0 3.4px 6.3px rgba(50, 50, 50, 0.09), 0 7px 10px rgba(50, 50, 50, 0.09); */
+    }
+    nav .me {
+        border-top: dashed 1px darkgrey;
+        border-bottom: dashed 1px darkgrey;
+        font-family: "system-ui", sans-serif;
+        background: linear-gradient(90deg, blue, rgb(242, 242, 242), blue);
+    }
+    nav a:hover, 
+    nav a:focus,
+    nav a.active {
+        border-bottom: solid 2px brown;
+        color: black;
+    }
+    nav a:active { color: black; }
+    .dd-menu {
+        background-color: rgba(250, 250, 250, 1); 
+        button { border-bottom: solid 2px transparent; }
+        button:hover { border-bottom: solid 2px brown; }
+    }
+
+    .new-message {
+        background-color: white;
+        color: black;
+    }
+    textarea::placeholder { color: green }
+}
+
+.dark-theme {
+    background-color: black;
+    color: white;
+    .modal-window, textarea, input { color: black; }
+    nav { color: white; }
+    nav .me {
+        border-top: dashed 1px cadetblue;
+        border-bottom: dashed 1px cadetblue;
+        font-family: "system-ui", sans-serif;
+        background: linear-gradient(90deg, gold, rgb(55, 55, 55), gold);
+    }
+    nav a:hover,
+    nav a:focus,
+    nav a.active {
+        border-bottom: solid 2px red; 
+        color: yellow; 
+    }
+    nav a:active { color: yellow; }
+    .dd-menu {
+        background-color: rgba(22, 22, 22, 1);
+        button { border-bottom: solid 2px transparent; }
+        button:hover {
+            border-bottom: solid 2px red;
+            color: yellow; 
+        }
+    }
+    .new-message {
+        background-color: black;
+        color: white;
+    }
+
+    textarea::placeholder { color: gold }
+}
+
+textarea::placeholder { font-weight: 100; }
+
+/** CUSTOM SCROLLBAR */
+::-webkit-scrollbar { width: 10px; }
+/* Track */
+::-webkit-scrollbar-track { background: transparent; }
+/* Handle */
+::-webkit-scrollbar-thumb { background: #888; border-radius: 50px; }
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover { background: #555; }
