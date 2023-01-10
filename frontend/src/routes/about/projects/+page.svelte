@@ -7,7 +7,7 @@
 <main>
     <div class="mb-5 background-details-wrapper">
         <h1 class="mb-5 text-3xl">Projects</h1>
-        <h1 class="text-2xl">Present</h1>
+        <h1 class="text-2xl">2019 - Present</h1>
         <h1 class="mx-5 text-large font-bold">
             💪 I'm the&nbsp;
             <a href="https://neontech.vercel.app" target="_blank" rel="noreferrer">NeonTech IT Solutions</a>.
