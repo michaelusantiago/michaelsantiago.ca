@@ -1,4 +1,4 @@
 /frontend/.svelte-kit
-/frontend/app
+# /frontend/app
 /frontend/node_modules
 /pb/pb_data/logs.db
