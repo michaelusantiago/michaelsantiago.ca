@@ -16,9 +16,10 @@
     import { onMount } from "svelte";
     import { serializeNonPOJ } from '$lib/utilities';
     import PocketBase from "pocketbase";
+    import { env } from "$env/dynamic/public";
 
-    // const pb = new PocketBase(env.PUBLIC_PB_URI); // this must be use in actual deployed version
-    const pb = new PocketBase("http://127.0.0.1:8090");
+    const pb = new PocketBase(env.PUBLIC_PB_URI); // this must be use in actual deployed version
+    // const pb = new PocketBase("http://127.0.0.1:8090");
     
     // Helper function that get's Users List
     const getUsersList = async () => {

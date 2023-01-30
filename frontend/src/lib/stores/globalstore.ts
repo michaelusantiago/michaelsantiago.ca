@@ -26,7 +26,8 @@ export const user: Writable<any> = writable();  // currently logged-in
 export const users: Writable<any> = writable([]);
 
 // const pb = new PocketBase(env.PUBLIC_PB_URI); // this must be in actual deployed version
-let pb_uri = (!browser) ? env.PUBLIC_PB_URI : "http://127.0.0.1:8090";
+// let pb_uri = (!browser) ? env.PUBLIC_PB_URI : "http://127.0.0.1:8090";
+let pb_uri = (!browser) ? env.PUBLIC_PB_URI : env.PUBLIC_PB_URI;
 const pb = new PocketBase(pb_uri);
 
 const _admin = serializeNonPOJ(
