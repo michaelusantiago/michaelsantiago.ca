@@ -4,10 +4,12 @@ import { serializeNonPOJ } from '$lib/utilities';
 // import Database from 'better-sqlite3';
 
 export const load: PageServerLoad = async ({ cookies, locals }) => {
-    /** Fetch just the last 3 latest posts */
-    const posts = serializeNonPOJ(await locals.pb.collection('posts').getList(1, 3, { sort: "-created" }));
-
-    return ({ posts: posts.items })
+    try {
+        /** Fetch just the last 3 latest posts */
+        const posts = serializeNonPOJ(await locals.pb.collection('posts').getList(1, 3, { sort: "-created" }));
+        
+        return ({ posts: posts.items })
+    } catch (error) { console.log('this one', error) }
 }
 
 export const actions: Actions = {

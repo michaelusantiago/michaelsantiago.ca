@@ -4181,7 +4181,7 @@ function set_paths(paths) {
 
 const app_template = ({ head, body, assets, nonce }) => "<!DOCTYPE html>\n<html lang=\"en\">\n\t<head>\n\t\t<meta charset=\"utf-8\" />\n\t\t<link rel=\"icon\" href=\"" + assets + "/favicon.png\" />\n\t\t<meta name=\"viewport\" content=\"width=device-width\" />\n\t\t<link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap\" rel=\"stylesheet\">\n\t\t<link href=\"https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\n\t\t" + head + "\n\t</head>\n\t<body>\n\t\t<div>" + body + "</div>\n\t</body>\n</html>\n";
 
-const error_template = ({ status, message }) => "<main>\r\n    <!-- <h1 class=\"text-[1.2rem]\">Something Went Wrong!</h1>\r\n    <div>" + status + "</div>\r\n    <div>" + message + "</div> -->\r\n</main>";
+const error_template = ({ status, message }) => "<main>\r\n    <h1 class=\"text-[1.2rem]\">Something Went Wrong!</h1>\r\n    <div>" + status + "</div>\r\n    <div>" + message + "</div>\r\n</main>";
 
 let read = null;
 
@@ -4222,7 +4222,7 @@ class Server {
 			app_template,
 			app_template_contains_nonce: false,
 			error_template,
-			version: "1675069549004"
+			version: "1690038166800"
 		};
 	}
 
@@ -4242,7 +4242,7 @@ class Server {
 		this.options.public_env = pub;
 
 		if (!this.options.hooks) {
-			const module = await import('./chunks/hooks.server-9bbfb627.js');
+			const module = await import('./chunks/hooks.server-5517e269.js');
 
 			this.options.hooks = {
 				handle: module.handle || (({ event, resolve }) => resolve(event)),

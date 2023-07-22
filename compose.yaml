@@ -1,15 +1,14 @@
+version: '3'
 services:
   michaelsantiago.ca:
     build: ./frontend
     ports:
       - 3000:3000
-
   ms_pb:
     build: ./pb
     ports:
       - 8090:8090
     volumes:
       - ms_pb_data:/usr/local/bin/pocketbase/pb_data
-
 volumes:
   ms_pb_data:
