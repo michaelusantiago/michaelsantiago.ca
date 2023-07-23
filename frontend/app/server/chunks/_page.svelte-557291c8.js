@@ -28,7 +28,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
             <span class="${"stack svelte-5pe2wz"}">MongoDB</span>
             <span class="${"stack svelte-5pe2wz"}">TypeScript</span>
             <span class="${"stack svelte-5pe2wz"}">Tailwind</span>
-            <span class="${"stack svelte-5pe2wz"}">AWS</span></h1></div>
+            <span class="${"stack svelte-5pe2wz"}">Vercel</span></h1></div>
 
     <div class="${"mb-5 background-details-wrapper"}"><h1 class="${"text-2xl"}">2020</h1>
         <h1 class="${"mx-5 text-large font-bold"}">💪 I developed 
@@ -51,4 +51,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-c6dfd841.js.map
+//# sourceMappingURL=_page.svelte-557291c8.js.map

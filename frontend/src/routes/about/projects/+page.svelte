@@ -17,7 +17,7 @@
             <span class="stack">MongoDB</span>
             <span class="stack">TypeScript</span>
             <span class="stack">Tailwind</span>
-            <span class="stack">AWS</span>
+            <span class="stack">Vercel</span>
         </h1>
     </div>
 
