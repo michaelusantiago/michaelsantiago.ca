@@ -28,7 +28,7 @@
         </div>
         <div class="me-details-container">
             <h1 style:color={($theme === "light") ? "brown" : "orange"}>Michael Santiago</h1>
-            <h3>Software Engineer</h3>
+            <h3>Software Developer</h3>
             <div class="text-sm">
                 <h4>
                     👨‍💼

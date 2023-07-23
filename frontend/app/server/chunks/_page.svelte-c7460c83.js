@@ -74,7 +74,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         <div class="${"me-details-container svelte-wklulu"}"><h1 class="${"svelte-wklulu"}"${add_styles({
 		"color": $theme === "light" ? "brown" : "orange"
 	})}>Michael Santiago</h1>
-            <h3 class="${"svelte-wklulu"}">Software Engineer</h3>
+            <h3 class="${"svelte-wklulu"}">Software Developer</h3>
             <div class="${"text-sm"}"><h4>👨‍💼
                     ${myAge.year > 1
 	? `<span>${escape(myAge.year)} years</span>`
@@ -136,4 +136,4 @@ ${($$result.head += '<!-- HEAD_svelte-urqx44_START -->' + `${($$result.title = `
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-eee3dcee.js.map
+//# sourceMappingURL=_page.svelte-c7460c83.js.map

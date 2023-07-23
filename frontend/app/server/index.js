@@ -4222,7 +4222,7 @@ class Server {
 			app_template,
 			app_template_contains_nonce: false,
 			error_template,
-			version: "1690106679027"
+			version: "1690113500746"
 		};
 	}
 
