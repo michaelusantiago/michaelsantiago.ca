@@ -10,6 +10,7 @@
     import PocketBase from "pocketbase";
     import { serializeNonPOJ } from "$lib/utilities";
     export let data: PageData;
+    import { env } from "$env/dynamic/public";
 
     $send_to_id = ($user?.role == 1) ? $admin?.id : null;
 
@@ -23,8 +24,8 @@
     let me_is_typing: boolean = false;
     let friend_is_typing: boolean = false;
 
-    // const pb = new PocketBase(env.PUBLIC_PB_URI); // this must be use in actual deployed version
-    const pb = new PocketBase("http://127.0.0.1:8090");
+    const pb = new PocketBase(env.PUBLIC_PB_URI); // this must be use in actual deployed version
+    // const pb = new PocketBase("http://127.0.0.1:8090");
 
     const updateUserIsTyping = async (is_typing: boolean)  => {
         try {

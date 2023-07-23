@@ -9,11 +9,13 @@ RUN npm ci
 
 EXPOSE 3000
 
-ENV ORIGIN=http://127.0.0.1:3000
-ENV PUBLIC_PB_URI=http://ms_pb:8090
-# ENV PUBLIC_PB_URI=http://127.0.0.1:8090 
-# ENV ORIGIN=http://18.183.47.117:3000
-# ENV PUBLIC_PB_URI=http://18.183.47.117:8090 
+# for local machine
+# ENV ORIGIN=http://127.0.0.1:3000
+# ENV PUBLIC_PB_URI=http://ms_pb:8090
+
+# for render.com
+ENV ORIGIN=https://michaelsantiago.onrender.com
+ENV PUBLIC_PB_URI=https://michaelsantiago.pockethost.io
 CMD [ "node", "./app/index.js" ]
 
 # ms_pb is temporary because when the website have the domain, it should be domain instead of ms_pb

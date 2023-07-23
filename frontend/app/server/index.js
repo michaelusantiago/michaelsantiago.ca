@@ -4222,7 +4222,7 @@ class Server {
 			app_template,
 			app_template_contains_nonce: false,
 			error_template,
-			version: "1690038166800"
+			version: "1690098880658"
 		};
 	}
 
@@ -4242,7 +4242,7 @@ class Server {
 		this.options.public_env = pub;
 
 		if (!this.options.hooks) {
-			const module = await import('./chunks/hooks.server-5517e269.js');
+			const module = await import('./chunks/hooks.server-ca3fc2f8.js');
 
 			this.options.hooks = {
 				handle: module.handle || (({ event, resolve }) => resolve(event)),

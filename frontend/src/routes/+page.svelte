@@ -57,7 +57,7 @@
                 </h4>
                 <h4>🏝️ Puerto Princesa City, Palawan, Philippines</h4>
 
-                <span>📧 <a href="mailto:contact@michaelsantiago.ca">contact@michaelsantiago.ca</a></span>
+                <span>📧 <a href="mailto:contact@michaelsantiago.au">contact@michaelsantiago.au</a> (don't do it now)</span>
 
                 {#if ($admin?.is_online)}
                     <div class="flex items-center gap-2 font-extrabold text-lg">

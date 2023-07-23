@@ -3,8 +3,6 @@ import PocketBase from 'pocketbase';
 import { env } from "$env/dynamic/public";
 
 export const handle: Handle = async ({ event, resolve }) => {
-    try {
-
     if (!event.locals.pb) {
         event.locals.pb = new PocketBase(env.PUBLIC_PB_URI);
         event.locals.pb.autoCancellation(false)
@@ -22,10 +20,6 @@ export const handle: Handle = async ({ event, resolve }) => {
         if (event.locals.pb.authStore.isValid) {
             event.locals.user = event.locals.pb.authStore.model;
         }
-    }
-
-    } catch (error) {
-        console.log(error)
     }
 
     const response = await resolve(event);
