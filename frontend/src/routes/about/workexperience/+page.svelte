@@ -6,6 +6,25 @@
 </script>
 <main>
     <h1 class="mb-5 head-title text-3xl">Work Experience</h1>
+
+    <div class="work-experience-container mb-3">
+        <h1>
+            Jr. Web Developer
+            <span>Feb 06, 2023 - April 06, 2023</span>
+        </h1>
+        <h2>
+            <a href="https://ecomexperts.io" target="_blank" rel="noreferrer">EcomExperts</a>
+            <span>
+                Shopify's Ecommerce Agencies and Developer's Partner
+            </span>
+        </h2>
+        <div class="details">
+            <ul>
+                <li>Developed/Enhanced/Fixed our client's Ecommerce Websites built in Shopify.</li>
+            </ul>
+        </div>
+    </div>
+
     <div class="work-experience-container mb-3">
         <h1>
             Systems Technical Support

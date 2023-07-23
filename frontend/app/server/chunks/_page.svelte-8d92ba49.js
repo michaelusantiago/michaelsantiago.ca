@@ -19,6 +19,14 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	$$unsubscribe_about_selected_menu();
 
 	return `<main><h1 class="${"mb-5 head-title text-3xl svelte-1l8e1d9"}">Work Experience</h1>
+
+    <div class="${"work-experience-container mb-3"}"><h1 class="${"svelte-1l8e1d9"}">Jr. Web Developer
+            <span class="${"svelte-1l8e1d9"}">Feb 06, 2023 - April 06, 2023</span></h1>
+        <h2 class="${"svelte-1l8e1d9"}"><a href="${"https://ecomexperts.io"}" target="${"_blank"}" rel="${"noreferrer"}" class="${"svelte-1l8e1d9"}">EcomExperts</a>
+            <span class="${"svelte-1l8e1d9"}">Shopify&#39;s Ecommerce Agencies and Developer&#39;s Partner
+            </span></h2>
+        <div class="${"details"}"><ul class="${"svelte-1l8e1d9"}"><li>Developed/Enhanced/Fixed our client&#39;s Ecommerce Websites built in Shopify.</li></ul></div></div>
+
     <div class="${"work-experience-container mb-3"}"><h1 class="${"svelte-1l8e1d9"}">Systems Technical Support
             <span class="${"svelte-1l8e1d9"}">June 07, 2022 - Present</span></h1>
         <h2 class="${"svelte-1l8e1d9"}"><a href="${"http://fadoms.com.ph"}" target="${"_blank"}" rel="${"noreferrer"}" class="${"svelte-1l8e1d9"}">FADOMS</a>
@@ -60,4 +68,4 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-33df194d.js.map
+//# sourceMappingURL=_page.svelte-8d92ba49.js.map
