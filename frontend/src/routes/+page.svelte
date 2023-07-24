@@ -23,13 +23,13 @@
 
 <main>
     <div class="me-container">
-        <div>
+        <div class="me-img">
             <img src="./me.jpg" alt="Michael Santiago" width="300px"/>
         </div>
         <div class="me-details-container">
             <h1 style:color={($theme === "light") ? "brown" : "orange"}>Michael Santiago</h1>
             <h3>Software Developer</h3>
-            <div class="text-sm">
+            <div>
                 <h4>
                     👨‍💼
                     {#if myAge.year > 1}
@@ -129,6 +129,7 @@
     h1 {
         font-size: 2.75rem;
         font-weight: 700;
+        white-space: nowrap;
     }
 
     h3 {
@@ -140,18 +141,25 @@
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-rows: auto;
-        gap: 5rem;
-        /* margin-top: 3rem; */
+        /* gap: 5rem; */
         margin-bottom: 4em;
     }
 
     .me-details-container {
+        width: 100%;
         align-items: center;
         margin: auto;
-        margin-left: 0;
+        padding: 1rem;
+        /* margin-left: 0; */
     }
 
-    img { border-radius: 100%; }
+    .me-img {
+        padding: 1rem;
+        img {
+            border-radius: 100%;
+            align-self: center;
+        }
+    }
     
     a:not(.links a) {
         color: cadetblue;
@@ -160,4 +168,14 @@
     .links a { transition: transform ease-in-out 0.2s; }
     .links a:hover { transform: scale(1.2); }
     /* input::placeholder { color: green; } */
+
+    @media screen and (max-width: 650px) {
+        .me-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-self: center;
+        }
+        h2 { padding-inline: 10px; }
+    }
 </style>

@@ -9,7 +9,8 @@
 </svelte:head>
 
 <main>
-    <div class="nav">
+    <!-- <div class="nav"> -->
+    <nav>
         <ul>
             <li>
                 <a
@@ -44,7 +45,7 @@
                 </a>
             </li>
         </ul>
-    </div>
+    </nav>
     <div class="content">
         <slot/>
     </div>
@@ -53,19 +54,33 @@
 <style lang="postcss">
     main { display: flex; }
 
-    .nav {
+    nav {
         border-right: solid 1px gold;
         margin-right: 1rem;
         flex: 0.75;
     }
-    .nav a {
+    nav a {
         font-family: "Rajdhani", sans-serif;
         font-size: 1.15rem;
     }
-    .nav a:hover, .nav a.active {
+    nav a:hover, nav a.active {
         color: block;
         font-weight: bold;
     }
 
     .content { flex: 3; }
+
+    @media screen and (max-width: 650px) {
+        main {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            /* margin: 0; */
+            padding: 0 2rem;
+        }
+        nav { margin-bottom: 1rem; }
+        nav ul {
+            display: flex;
+            gap: 1rem;
+        }
+    }
 </style>

@@ -138,10 +138,23 @@
         /* font-family: "Rajdhani", sans-serif; */
         font-family: poppins, sans-serif;
         font-weight: 300;
+        box-sizing: border-box;
     }
 
     .content {
-        margin-top: 7em;
+        margin-top: 2em;
         z-index: 0;
+    }
+
+    @media screen and (max-width: 1290px) {
+        main { margin: 0 10%; }
+    }
+
+    @media screen and (max-width: 850px) {
+        main { margin: 0 2%; }
+    }
+
+    @media screen and (max-width: 650px) {
+        main { margin: 0; }
     }
 </style>

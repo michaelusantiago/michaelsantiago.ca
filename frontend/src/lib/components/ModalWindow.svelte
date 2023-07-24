@@ -57,13 +57,12 @@
         --mw-width: 400px;
     }
     .modal-window-wrapper {
-        display: grid;
+        display: flex;
         position: fixed;
         top: 0;
         left: 0;
-        height: 100vh;
-        width: 100vw;
-        background-color: rgba(0, 0, 0, 0.3);
+        height: 100%;
+        width: 100%;
         z-index: 11;
         transition: background-color 0.8s ease-out;
     }
@@ -72,18 +71,15 @@
         display: flex;
         position: absolute;
         flex-direction: column;
-        height: var(--mw-height);
         width: var(--mw-width);
         border: solid 1px lightblue;
         background-color: whitesmoke;
-        height: 100vh;
-        box-sizing: border-box;
-        right: 0.5em;
+        height: 100%;
+        right: 0em;
         overflow-y: auto;
     }
 
     .content {
-        height: 100%;
         padding: 2px 5px;
     }
 </style>

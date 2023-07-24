@@ -4,8 +4,8 @@
 <main>
     <hr />
     <div class="wrapper">
-        <span class:bolder-font={$theme==="light"} class="signature">Michael Santiago &copy; 2022</span>
-        <span class="svelte">
+        <span class:bolder-font={$theme==="light"} class="signature">Michael Santiago &copy; 2022 &nbsp;</span>
+        <span class="built-in">
             built in&nbsp;
             <a style:color={($theme === "light") ? "#222" : "gold"} href="https://kit.svelte.dev" target="_blank" rel="noreferrer">SvelteKit</a>
             &nbsp;+&nbsp;
@@ -26,11 +26,12 @@
         font-weight: 300;
         padding: 1em;
         font-size: 0.9em;
+        white-space: nowrap;
     }
     .wrapper .signature { flex: 1; } 
-    .wrapper .svelte {
-        flex: 1;
-        text-align: right;
-    } 
+    .wrapper .built-in { text-align: right; } 
     .bolder-font { font-weight: 300; }
+
+    @media screen and (max-width: 650px) {
+    }
 </style>

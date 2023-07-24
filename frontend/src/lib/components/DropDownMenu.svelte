@@ -67,11 +67,11 @@
             padding: 3px 7px;
         }
         display: flex;
-        gap: 5px;
         flex-direction: column;
         position: absolute;
         padding: 17px;
         width: 12rem; 
+        right: 2rem;
         border-bottom-left-radius: 12px;
         border-bottom-right-radius: 12px;
         font-size: large;

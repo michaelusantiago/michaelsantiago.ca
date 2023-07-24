@@ -17,16 +17,16 @@
     const onChangeInput = async (e: Event) => profile_update_error = null;
 </script>
 
-<main>
-    <!-- Notification -->
-    {#if $show_notification}
-        <Notification success={true}>
-            <div slot="message">
-                Profile successfully updated!
-            </div>
-        </Notification>
-    {/if}
+<!-- Notification -->
+{#if $show_notification}
+    <Notification success={true}>
+        <div slot="message">
+            Profile successfully updated!
+        </div>
+    </Notification>
+{/if}
 
+<main>
     <ModalWindow on:close={() => { $show_profile_form = false; }}>
         <div class="p-3">
             <h1 class="font-bold text-2xl py-3">Profile</h1>
@@ -99,7 +99,6 @@
 
                         <div class="group-btn">
                             <button
-                                default={true}
                                 formaction="/?/update_basic_info"
                                 class="bg-blue-500 px-10 py-2 rounded-md">
                                 <span class="flex gap-2 items-center">
@@ -175,7 +174,6 @@
                             <!-- Action Buttons -->
                             <div class="group-btn">
                                 <button
-                                    default={true}
                                     formaction="/?/change_password"
                                     class="bg-blue-500 px-10 py-2 rounded-md">
                                     <span class="flex gap-2 items-center">
@@ -255,7 +253,6 @@
 
                         <div class="group-btn">
                             <button
-                                default={true}
                                 formaction="/?/change_email"
                                 class="bg-blue-500 px-10 py-2 rounded-md">
                                 <span class="flex gap-2 items-center">

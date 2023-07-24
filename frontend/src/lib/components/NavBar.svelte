@@ -7,56 +7,53 @@
 
 <svelte:window bind:scrollY={currentY}/>
 
-<main>
-    <nav 
-        class:nav-shadow-white={$theme === 'dark' && currentY >= 11}
-        class:nav-shadow-black={$theme === 'light' && currentY >= 11}>
-        <ul class="flex">
+<nav 
+    class:nav-shadow-white={$theme === 'dark' && currentY >= 11}
+    class:nav-shadow-black={$theme === 'light' && currentY >= 11}>
+    <ul class="flex">
+        <li class="mr-2">
+            <a 
+                class:active={$selected_menu === 'dashboard'}
+                on:click={() => $selected_menu = 'dashboard'}
+                href="/">
+                Dashboard
+            </a>
+        </li>
+        <li class="mr-2">
+            <a 
+                class:active={$selected_menu === 'background'}
+                on:click={() => $selected_menu = 'background'}
+                href={`/about/${$about_selected_menu}`}>
+                Background
+            </a>
+        </li>
+
+        {#if $user}
             <li class="mr-2">
                 <a 
-                    class:active={$selected_menu === 'dashboard'}
-                    on:click={() => $selected_menu = 'dashboard'}
-                    href="/">
-                    Dashboard
+                    class="chat"
+                    class:active={$selected_menu === 'chat'}
+                    on:click={() => $selected_menu = 'chat'}
+                    href="/chat">
+                    Chat
+                    {#if ($unreadChats?.totalCount)}
+                        <span>{$unreadChats.totalCount}</span>
+                    {/if}
                 </a>
             </li>
-            <li class="mr-2">
-                <a 
-                    class:active={$selected_menu === 'background'}
-                    on:click={() => $selected_menu = 'background'}
-                    href={`/about/${$about_selected_menu}`}>
-                    Background
-                </a>
-            </li>
-
-            {#if $user}
-                <li class="mr-2">
-                    <a 
-                        class="chat"
-                        class:active={$selected_menu === 'chat'}
-                        on:click={() => $selected_menu = 'chat'}
-                        href="/chat">
-                        Chat
-                        {#if ($unreadChats?.totalCount)}
-                            <span>{$unreadChats.totalCount}</span>
-                        {/if}
-                    </a>
-                </li>
+        {/if}
+    </ul>
+    <span class="text-lg me">&copy;&nbsp;MICHAEL SANTIAGO</span>
+    <span><ThemeButton /></span>
+    <span>
+        {#if $user}
+            {#if ($user?.role == 1)}
+                <p class="text-sm">{$user?.email}</p>&nbsp;
             {/if}
-
-        </ul>
-        <span class="text-lg me">&copy;&nbsp;MICHAEL SANTIAGO</span>
-        <span><ThemeButton /></span>
-        <span>
-            {#if $user}
-                {#if ($user?.role == 1)}
-                    <p class="text-sm">{$user?.email}</p>&nbsp;
-                {/if}
-            {/if}
-            <DropDownMenu />
-        </span>
-    </nav>
-</main>
+        {/if}
+        <DropDownMenu />
+    </span>
+</nav>
 
 <style lang="postcss">
     nav {
@@ -66,21 +63,23 @@
         gap: 10px;
         border-bottom-left-radius: 20px;
         border-bottom-right-radius: 20px;
-        position: fixed;
+        position: sticky;
         backdrop-filter: blur(6px);
         font-family: "Rajdhani", sans-serif;
         font-weight: 600;
         font-size: 1.3rem;
         top: 0;
-        width: 63%;
-        left: 50%;
-        transform: translate(-50%, 0);
+        width: 100%;
         z-index: 10;
     }
     nav ul { gap: 10px; }
     nav li, span { padding: 2px; }
-    .nav-shadow-black { box-shadow: 0 3.4px 6.3px rgba(0, 0, 0, 0.09), 0 7px 10px rgba(0, 0, 0, 0.09); }
-    .nav-shadow-white { box-shadow: 0 3.4px 6.3px rgba(255, 255, 255, 0.09), 0 7px 10px rgba(255, 255, 255, 0.09); }
+    .nav-shadow-black {
+        box-shadow: 0 3.4px 6.3px rgba(0, 0, 0, 0.09), 0 7px 10px rgba(0, 0, 0, 0.09);
+    }
+    .nav-shadow-white {
+        box-shadow: 0 3.4px 6.3px rgba(255, 255, 255, 0.09), 0 7px 10px rgba(255, 255, 255, 0.09);
+    }
     nav span {
         display: flex;
         align-items: center;
@@ -103,6 +102,7 @@
     }
 
     .me {
+        white-space: nowrap;
         /* Animation */
         animation: rolling_text_fill;
         animation-duration: 120s;
@@ -122,5 +122,12 @@
     @keyframes rolling_text_fill {
         from { background-position: 0%; }
         to { background-position: 400%; }
+    }
+
+    @media screen and (max-width: 1000px) {
+        /* .me { display: none; } */
+    }
+    @media screen and (max-width: 650px) {
+        .me { display: none; }
     }
 </style>

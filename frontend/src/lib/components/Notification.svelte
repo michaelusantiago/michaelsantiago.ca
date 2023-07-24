@@ -5,9 +5,31 @@
     export let success: boolean;
 </script>
 
+<main>
+    <div class="main" in:fly="{{ y: -50, duration: 500 }}" out:fade="{{ delay: 250, duration: 300 }}">
+        <div class="flex items-center">
+            <div class="flex-grow p-2"><slot name="message">No message</slot></div>
+            {#if success}
+                <Fa icon={faCheckCircle} color="green"/>
+            {:else}
+                <Fa icon={faTimesCircle} color="red"/>
+            {/if}
+        </div>
+    </div>
+</main>
+
 <style lang="postcss">
+    main {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 12;
+    }
     .main {
-        display: block;
+        display: flex;
         position: absolute;
         background-color: whitesmoke;
         color: #222;
@@ -27,14 +49,3 @@
         z-index: 12;
     } 
 </style>
-
-<div class="main" in:fly="{{ y: -50, duration: 500 }}" out:fade="{{ delay: 250, duration: 300 }}">
-    <div class="flex items-center">
-        <div class="flex-grow p-2"><slot name="message">No message</slot></div>
-        {#if success}
-            <Fa icon={faCheckCircle} color="green"/>
-        {:else}
-            <Fa icon={faTimesCircle} color="red"/>
-        {/if}
-    </div>
-</div>

@@ -30,4 +30,8 @@
         font-size: large;
         margin-bottom: 1em;
     }
+
+    @media screen and (max-width: 450px) {
+        .content { font-size: medium; }
+    }
 </style>
