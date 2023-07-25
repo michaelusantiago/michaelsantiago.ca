@@ -1,10 +1,10 @@
-import { get, writable, type Writable } from "svelte/store";
+import { writable, type Writable } from "svelte/store";
 import { browser } from "$app/environment";
 import PocketBase from 'pocketbase';
 import { serializeNonPOJ } from '$lib/utilities';
 import { env } from "$env/dynamic/public";
 
-let _theme;
+let _theme = 'light';
 if (browser) _theme = localStorage.getItem('theme') || 'light';
 export const theme = writable(_theme);
 
