@@ -9,7 +9,7 @@ import eventsource from "eventsource";
 export const load: LayoutServerLoad = async ({ locals }) => {
     try {
         // if (global.EventSource) global.EventSource = null;
-        // global.EventSource = eventsource;
+        global.EventSource = eventsource;
 
         // Update current user's online status to true
         if (locals.user) {
@@ -30,20 +30,22 @@ export const load: LayoutServerLoad = async ({ locals }) => {
             })
         );
 
-        const _uc = unreadChats.reduce((allChats: any, curr: any) => {
-            const currCount = allChats[curr.from] ?? 0;
-            const totalCount = allChats['totalCount'] ?? 0;
-            if (!curr.read && (curr.to === locals.user?.id)) {
-                return {
-                    ...allChats,
-                    totalCount: totalCount + 1,
-                    [curr.from]: currCount + 1
-                }
-            } else return { ...allChats }
-        }, {});
+        if (unreadChats) {
+            const _uc = unreadChats.reduce((allChats: any, curr: any) => {
+                const currCount = allChats[curr.from] ?? 0;
+                const totalCount = allChats['totalCount'] ?? 0;
+                if (!curr.read && (curr.to === locals.user?.id)) {
+                    return {
+                        ...allChats,
+                        totalCount: totalCount + 1,
+                        [curr.from]: currCount + 1
+                    }
+                } else return { ...allChats }
+            }, {});
 
-        // return ({ user: serializeNonPOJ(locals.user), chats, unreadChats: _uc });
-        return ({ user: serializeNonPOJ(locals.user), unreadChats: _uc });
+            // return ({ user: serializeNonPOJ(locals.user), chats, unreadChats: _uc });
+            return ({ user: serializeNonPOJ(locals.user), unreadChats: _uc });
+        }
     } catch (error) {
         console.log('this is the error', error)
     }

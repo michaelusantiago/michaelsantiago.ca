@@ -6,7 +6,7 @@ const manifest = {
 	_: {
 		entry: {"file":"_app/immutable/start-9b69e1ba.js","imports":["_app/immutable/start-9b69e1ba.js","_app/immutable/chunks/index-37f1e841.js","_app/immutable/chunks/parse-c28e5ac2.js","_app/immutable/chunks/env-public-1b9b25bc.js"],"stylesheets":[],"fonts":[]},
 		nodes: [
-			() => import('./chunks/0-6f96a615.js'),
+			() => import('./chunks/0-8ca69d15.js'),
 			() => import('./chunks/1-4d26add2.js'),
 			() => import('./chunks/2-4990c4fe.js'),
 			() => import('./chunks/3-8b24772a.js'),

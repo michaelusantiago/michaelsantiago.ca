@@ -1,8 +1,9 @@
 import { s as serializeNonPOJ } from './utilities-9e3a1c44.js';
-import 'eventsource';
+import eventsource from 'eventsource';
 
 const load = async ({ locals }) => {
   try {
+    global.EventSource = eventsource;
     if (locals.user) {
       await locals.pb.collection("users").update(locals.user.id, { is_online: true });
       locals.user.is_online = true;
@@ -13,19 +14,21 @@ const load = async ({ locals }) => {
         sort: "+created"
       })
     );
-    const _uc = unreadChats.reduce((allChats, curr) => {
-      const currCount = allChats[curr.from] ?? 0;
-      const totalCount = allChats["totalCount"] ?? 0;
-      if (!curr.read && curr.to === locals.user?.id) {
-        return {
-          ...allChats,
-          totalCount: totalCount + 1,
-          [curr.from]: currCount + 1
-        };
-      } else
-        return { ...allChats };
-    }, {});
-    return { user: serializeNonPOJ(locals.user), unreadChats: _uc };
+    if (unreadChats) {
+      const _uc = unreadChats.reduce((allChats, curr) => {
+        const currCount = allChats[curr.from] ?? 0;
+        const totalCount = allChats["totalCount"] ?? 0;
+        if (!curr.read && curr.to === locals.user?.id) {
+          return {
+            ...allChats,
+            totalCount: totalCount + 1,
+            [curr.from]: currCount + 1
+          };
+        } else
+          return { ...allChats };
+      }, {});
+      return { user: serializeNonPOJ(locals.user), unreadChats: _uc };
+    }
   } catch (error) {
     console.log("this is the error", error);
   }
@@ -44,4 +47,4 @@ const stylesheets = ["_app/immutable/assets/_layout-a31b8cc8.css","_app/immutabl
 const fonts = ["_app/immutable/assets/remixicon-e61f0d10.woff2","_app/immutable/assets/remixicon-c2dacfbc.woff","_app/immutable/assets/remixicon-0ac8bc3c.ttf"];
 
 export { component, file, fonts, imports, index, _layout_server_ts as server, stylesheets };
-//# sourceMappingURL=0-6f96a615.js.map
+//# sourceMappingURL=0-8ca69d15.js.map
