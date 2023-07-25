@@ -31,7 +31,8 @@ export const users: Writable<any> = writable([]);
 let pb_uri = env.PUBLIC_PB_URI
 const pb = new PocketBase(pb_uri);
 
-const _admin = serializeNonPOJ(
+let _admin = null
+_admin = serializeNonPOJ(
     await pb.collection('users')
     .getFullList(200, { filter: "role = 0" })
 )[0];
