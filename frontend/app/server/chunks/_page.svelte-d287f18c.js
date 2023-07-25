@@ -91,9 +91,9 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         
         <div class="${"text-right mt-10"}"><div class="${"text-sm"}">Mike S.</div>
             <div class="${"text-xs font-light"}"><b>Last modified:</b> ${escape(new Date(date_modified).toLocaleString("en-us", { dateStyle: "full", timeStyle: "long" }))}</div></div>`
-	: `<h3>Limited to friends... Please sign-up and log-in to see this page.</h3>`}
+	: `<p class="${"svelte-ir3x70"}">Limited to friends... Please sign-up and log-in to see this page.</p>`}
 </main>`;
 });
 
 export { Page as default };
-//# sourceMappingURL=_page.svelte-ebb65930.js.map
+//# sourceMappingURL=_page.svelte-d287f18c.js.map

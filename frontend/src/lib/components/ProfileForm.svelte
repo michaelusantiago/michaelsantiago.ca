@@ -110,7 +110,6 @@
                             </button>
                             <button
                                 type="reset"
-                                formaction="/?/close"
                                 class="bg-green-500 px-10 py-2 rounded-md"
                                 on:click={() => { $show_profile_form = false }}>
                                 Close

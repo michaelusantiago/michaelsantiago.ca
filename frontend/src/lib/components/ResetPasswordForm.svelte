@@ -55,7 +55,6 @@
                 />
             </label>
             <button
-                default={true}
                 formaction="/?/request_reset_password"
                 class="flex justify-center bg-gray-800 px-10 py-2 rounded-md text-white"
                 on:click={() => {
@@ -93,7 +92,7 @@
 
             <div class="group-btn">
                 <button
-                    formaction="/?/close"
+                    type="reset"
                     class="bg-green-500 px-10 py-2 rounded-md"
                     on:click={() => {
                         $show_forgot_password_request_form = false

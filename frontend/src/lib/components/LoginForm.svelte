@@ -53,7 +53,6 @@
             <div class="btn-action-wrapper">
                 <div class="group-btn">
                     <button
-                        default={true}
                         formaction="/?/log_in"
                         class="bg-blue-500 px-10 py-2 rounded-md">
                         <span class="flex gap-2 items-center">
@@ -64,7 +63,7 @@
                         </span>
                     </button>
                     <button
-                        formaction="/?/close"
+                        type="reset"
                         class="bg-green-500 px-10 py-2 rounded-md"
                         on:click={() => $show_login_form = false }>
                         Close

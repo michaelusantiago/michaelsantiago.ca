@@ -62,9 +62,9 @@ const LoginForm = create_ssr_component(($$result, $$props, $$bindings, slots) =>
                 <input name="${"email"}" type="${"email"}" class="${"svelte-4jrif"}"${add_attribute("this", email, 0)}></label>
             <label class="${"svelte-4jrif"}">Password
                 <input name="${"password"}" type="${"password"}" class="${"svelte-4jrif"}"${add_attribute("this", password, 0)}></label>
-            <div class="${"btn-action-wrapper svelte-4jrif"}"><div class="${"group-btn svelte-4jrif"}"><button ${"default" } formaction="${"/?/log_in"}" class="${"bg-blue-500 px-10 py-2 rounded-md"}"><span class="${"flex gap-2 items-center"}">Log in
+            <div class="${"btn-action-wrapper svelte-4jrif"}"><div class="${"group-btn svelte-4jrif"}"><button formaction="${"/?/log_in"}" class="${"bg-blue-500 px-10 py-2 rounded-md"}"><span class="${"flex gap-2 items-center"}">Log in
                             ${``}</span></button>
-                    <button formaction="${"/?/close"}" class="${"bg-green-500 px-10 py-2 rounded-md"}">Close
+                    <button type="${"reset"}" class="${"bg-green-500 px-10 py-2 rounded-md"}">Close
                     </button></div>
 
                 
@@ -135,13 +135,13 @@ const ResetPasswordForm = create_ssr_component(($$result, $$props, $$bindings, s
             <label class="${"svelte-10gg63z"}">Email
                 
                 <input autofocus name="${"email"}" type="${"email"}" class="${"svelte-10gg63z"}"></label>
-            <button ${"default" } formaction="${"/?/request_reset_password"}" class="${"flex justify-center bg-gray-800 px-10 py-2 rounded-md text-white"}">${`<i class="${"ri-mail-send-line"}"></i> 
+            <button formaction="${"/?/request_reset_password"}" class="${"flex justify-center bg-gray-800 px-10 py-2 rounded-md text-white"}">${`<i class="${"ri-mail-send-line"}"></i> 
                     <span>Send recovery link</span>`}</button>
 
             
             ${``}
 
-            <div class="${"group-btn svelte-10gg63z"}"><button formaction="${"/?/close"}" class="${"bg-green-500 px-10 py-2 rounded-md"}">Back to Log in
+            <div class="${"group-btn svelte-10gg63z"}"><button type="${"reset"}" class="${"bg-green-500 px-10 py-2 rounded-md"}">Back to Log in
                 </button></div></form>`;
 		}
 	})}
@@ -200,7 +200,7 @@ const SignUpForm = create_ssr_component(($$result, $$props, $$bindings, slots) =
             
             <div class="${"group-btn svelte-1l5a8bz"}"><button formaction="${"/?/sign_up"}" class="${"bg-blue-500 px-10 py-2 rounded-md"}"><span class="${"flex gap-2 items-center"}">Sign up 
                         ${``}</span></button>
-                <button formaction="${"/?/close"}" class="${"bg-green-500 px-10 py-2 rounded-md"}">Close
+                <button type="${"reset"}" class="${"bg-green-500 px-10 py-2 rounded-md"}">Close
                 </button></div></form>`;
 		}
 	})}
@@ -282,7 +282,7 @@ ${$show_notification
 
                         <div class="${"group-btn svelte-x5olwj"}"><button formaction="${"/?/update_basic_info"}" class="${"bg-blue-500 px-10 py-2 rounded-md"}"><span class="${"flex gap-2 items-center"}">Save Changes
                                     ${``}</span></button>
-                            <button type="${"reset"}" formaction="${"/?/close"}" class="${"bg-green-500 px-10 py-2 rounded-md"}">Close
+                            <button type="${"reset"}" class="${"bg-green-500 px-10 py-2 rounded-md"}">Close
                             </button></div></form>`;
 				}
 			})}</div>
@@ -590,4 +590,4 @@ ${$show_profile_form
 });
 
 export { Layout as default };
-//# sourceMappingURL=_layout.svelte-9df9ff54.js.map
+//# sourceMappingURL=_layout.svelte-27b98072.js.map

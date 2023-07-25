@@ -130,7 +130,7 @@
                     </span>
                 </button>
                 <button
-                    formaction="/?/close"
+                    type="reset"
                     class="bg-green-500 px-10 py-2 rounded-md"
                     on:click={() => { $show_sign_up_form = false }}>
                     Close

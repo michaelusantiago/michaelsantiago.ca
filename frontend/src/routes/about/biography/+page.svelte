@@ -96,7 +96,7 @@
             <div class="text-xs font-light"><b>Last modified:</b> {new Date(date_modified).toLocaleString("en-us", { dateStyle: "full", timeStyle: "long"})}</div>
         </div>
     {:else}
-        <h3>Limited to friends... Please sign-up and log-in to see this page.</h3>
+        <p>Limited to friends... Please sign-up and log-in to see this page.</p>
     {/if}
 </main>
 
