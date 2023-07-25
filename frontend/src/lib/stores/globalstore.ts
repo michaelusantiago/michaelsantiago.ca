@@ -5,13 +5,13 @@ import { serializeNonPOJ } from '$lib/utilities';
 import { env } from "$env/dynamic/public";
 
 let _theme = 'light';
-if (browser) _theme = localStorage.getItem('theme') || 'light';
+// if (browser) _theme = localStorage.getItem('theme') || 'light';
 export const theme = writable(_theme);
 
 // Will only sets/subscribe this when instruction is coming from browser (not from backend server)
 export const client_timezone: Writable<string> = writable('UTC');
 if (browser) {
-    theme.subscribe((value) => localStorage.setItem('theme', value));
+    // theme.subscribe((value) => localStorage.setItem('theme', value));
     try {
         fetch('https://ipwho.is')
         .then(res =>  res.json())
