@@ -18,7 +18,6 @@
 
     // careful not to destruct values from data, it will fail and will confuse you
     export let data: PageData;
-
 </script>
 
 <main>

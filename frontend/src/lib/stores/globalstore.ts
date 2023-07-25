@@ -22,7 +22,7 @@ if (browser) {
 }
 
 // I typed this particular store to stop the typescript yelling about it
-export const user: Writable<any> = writable();  // currently logged-in
+export const user: Writable<any> = writable(null);  // currently logged-in
 export const users: Writable<any> = writable([]);
 
 // let pb_uri = (!browser) ? env.PUBLIC_PB_URI : "http://127.0.0.1:8090";

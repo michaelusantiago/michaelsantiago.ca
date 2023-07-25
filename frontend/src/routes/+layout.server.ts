@@ -9,7 +9,7 @@ import eventsource from "eventsource";
 export const load: LayoutServerLoad = async ({ locals }) => {
     try {
         // if (global.EventSource) global.EventSource = null;
-        global.EventSource = eventsource;
+        // global.EventSource = eventsource;
 
         // Update current user's online status to true
         if (locals.user) {
