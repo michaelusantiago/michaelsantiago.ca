@@ -39,16 +39,12 @@
         align-items: center;
         justify-content: space-between;
         background-color: var(--header-bg-color);
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
         color: var(--header-text-color);
         padding: 15px;
         cursor: pointer;
     }
     .header:hover { --header-bg-color: var(--header-bg-hover-color); }
     .header-br {
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
         transition: border-radius linear 0.5s;
     }
     .header span {

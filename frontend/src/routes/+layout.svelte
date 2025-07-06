@@ -1,160 +1,196 @@
 <script lang="ts">
-    import "../app.css";
-    import "remixicon/fonts/remixicon.css";
-    import LoginForm from "$lib/components/LoginForm.svelte";
-    import ResetPasswordForm from "$lib/components/ResetPasswordForm.svelte";
-    import SignUpForm from "$lib/components/SignUpForm.svelte";
-    import ProfileForm from "$lib/components/ProfileForm.svelte";
-    import type { LayoutData, PageData } from "./$types";
-    import NavBar from "$lib/components/NavBar.svelte";
-    import Footer from "$lib/components/Footer.svelte";
+    import LoginForm from "@lib/components/LoginForm.svelte"
+    import SignUpForm from "@lib/components/SignUpForm.svelte"
+    import ProfileForm from "@lib/components/ProfileForm.svelte"
+    import ResetPasswordForm from "@lib/components/ResetPasswordForm.svelte"
+    import NavBar from "@lib/components/NavBar.svelte"
+    import Footer from "@lib/components/Footer.svelte"
+    import Notification from "@lib/components/Notification.svelte"
+    import "../app.css"
+    import { onMount } from "svelte"
+    import { page } from "$app/stores"
+    import PocketBase from "pocketbase"
+    import { env } from "$env/dynamic/public"
+    import * as db from "$lib/Database"
     import {
-        users, chats, unreadChats, send_to_id, admin, user, show_sign_up_form,
-        show_login_form, show_forgot_password_request_form, show_notification,
-        show_profile_form, theme
-    } from "$lib/stores/globalstore";
-    import { onMount } from "svelte";
-    import { serializeNonPOJ } from '$lib/utilities';
-    import PocketBase from "pocketbase";
-    import { env } from "$env/dynamic/public";
+        selected_drop_down_menu,
+        current_user,
+        admin,
+        posts,
+        chats,
+        unread_chats,
+        friends_list,
+        send_to_id
+    } from "@lib/store"
 
-    const pb = new PocketBase(env.PUBLIC_PB_URI); // this must be use in actual deployed version
-    // const pb = new PocketBase("http://127.0.0.1:8090");
-    
-    // Helper function that get's Users List
-    const getUsersList = async () => {
-        $users = serializeNonPOJ(await pb.collection('users')
-            .getFullList(200, {
-                filter: "role = 1",
-                sort: '+first_name, +last_name'
-            })
-        );
-    };
+    const pb = new PocketBase(env.PUBLIC_PB_URI)
+    let is_show_signup_success_notificaion = false
+    let is_show_reset_password_success_notification = false
+    let is_show_profile_update_success = false
+    let is_show_request_email_change_success = false
+    let is_password_reset = false
 
-    const getAdmin = async () => {
-        $admin = serializeNonPOJ(await pb.collection('users')
-            .getFullList(200, { filter: "role = 0" })
-        )[0];
-    };
+    onMount(() => {
+        /**
+         * Get the initial friends_list here
+         * Notice the use of .then() instead of await
+        */
+        db.getFriendsList(pb)
+        .then(data => $friends_list = data)
 
-    const getUserChats = async (friend_id: string, admin_id: string) => {
-        $chats = serializeNonPOJ(await pb.collection('chats')
-            .getFullList(200, {
-                filter: `(from = "${friend_id}" && to = "${admin_id}") || (from = "${admin_id}" && to = "${friend_id}")`,
-                sort: '+created'
-            })
-        );
-    }
+        /**
+        * Get the unread chats
+        */
+        if ($current_user)
+            db.getUnreadChats($current_user.id)
+            .then(data => $unread_chats = data)
 
-    const getUnreadChats = async () => {
-        /** Get unread chat's list */
-        const _unreadChats = serializeNonPOJ(await pb.collection('chats')
-            .getFullList(0, {
-                filter: `read = false`,
-                sort: '+created'
-            })
-        );
+        /**
+         * Realtime update
+         * Watch users table changes realtime and update view
+         * It has nothing to do with Load function in .server or .ts files
+         */
+        pb.collection("users").subscribe("*", async (result: any) => {
+            try {
+                $admin = await db.getAdmin()
+                $friends_list = await db.getFriendsList(pb)
+            } catch (error) { console.log(error) }
+        });
 
-        const _uc = _unreadChats.reduce((allChats: any, curr: any) => {
-            const currCount = allChats[curr.from] ?? 0;
-            const totalCount = allChats['totalCount'] ?? 0;
-            if (!curr.read && (curr.to === $user?.id)) {
-                return {
-                    ...allChats,
-                    totalCount: totalCount + 1,
-                    [curr.from]: currCount + 1
-                }
-            } else return { ...allChats }
-        }, {});
+        pb.collection("posts").subscribe("*", async (result: any) => {
+            $posts = await db.getPost()
+        })
 
-        $unreadChats = _uc;
-    }
+        pb.collection("chats").subscribe("*", async (result: any) => {
+            if ($current_user.id === $admin.id)
+                $chats = (await db.getChats($admin.id, $send_to_id)).chats
+            else
+                $chats = (await db.getChats($current_user.id, $admin.id)).chats
 
-    $: {
-        if ($show_notification) {
-            const timeout = setTimeout(() => {
-               $show_notification = false 
-               location.reload();
-            }, 4000);
+            $unread_chats = (await db.getUnreadChats($current_user.id))
+        })
+
+        return () => {
+            pb.collection("users").unsubscribe('*')
+            pb.collection("posts").unsubscribe('*')
+            pb.collection("chats").unsubscribe('*')
+        }
+    })
+
+    const onCloseSignUp = async (event: CustomEvent) => {
+        $selected_drop_down_menu = null
+
+        // show the notificaion
+        if (event.detail?.success) {
+            is_show_signup_success_notificaion = true
+            // Close notificaiton after 3 seconds
+            setTimeout(() => is_show_signup_success_notificaion = false, 5000)
         }
     }
 
-    export let data: LayoutData;
+    const oncloseLoginForm = async (event: CustomEvent) => {
+        is_password_reset = event.detail?.password_reset
+        $selected_drop_down_menu = null
+    }
 
-    /** Set's global store user (this is the user that is currently logged in) */
-    $user = data.user; 
+    const onCloseResetForm = async (event: CustomEvent) => {
+        if (event.detail?.back_to_main) $selected_drop_down_menu = "login"
+        is_show_reset_password_success_notification = Boolean(event.detail?.success)
+        setTimeout(() => is_show_reset_password_success_notification = false, 5000)
+        is_password_reset = false 
+    }
 
-    /** When user is not on the chat page */
-    $unreadChats = data?.unreadChats;
+    const onCloseProfileForm = async (event: CustomEvent) => {
+        // const success = event.detail?.success
+        $selected_drop_down_menu = null
+        if (event.detail?.success) {
+            if (!event.detail?.change_email) {
+                is_show_profile_update_success = true
+                setTimeout(() => is_show_profile_update_success = false, 5000)
+            } else {
+                is_show_request_email_change_success = true
+                setTimeout(() => is_show_request_email_change_success = false, 7000)
+            }
+            window.location.reload()
+        }
+        // Might as well ask for page reload if the update is successful
+        // if (success == true) window.location.reload()
+    }
 
-    onMount(async () => {
-        await getUsersList();
-
-        document.body.classList.add(`${$theme}-theme`);
-
-        // Subscribe to Realtime Data
-        // Listen to the database changes on users Collection
-        await pb.collection("users").subscribe("*", async (chat: any) => {
-            await getUsersList();
-            await getAdmin();
-        });
-
-        /** Persistent/Realtime chat update */
-        pb.collection("chats").subscribe("*", async (chat: any) => {
-            const admin = await pb.collection('users').getFirstListItem('role=0');
-            // if (chat.action == 'create') {
-                const friend_id = (data?.user.role == 1) ? data?.user.id : $send_to_id;
-                await getUserChats(friend_id, admin?.id);
-                await getUnreadChats();
-            // }
-        });
-    });
+    /**
+     * This is only when page is Loaded/Reloaded NOT when realtime update happens
+     */
+    $current_user = $page.data.current_user
+    $admin = $page.data.admin
+    $unread_chats = $page.data.unread_chats
 </script>
 
-<!-- Log In -->
-{#if $show_login_form} <LoginForm /> {/if}
+{#if is_password_reset}
+    <ResetPasswordForm on:close={onCloseResetForm} />
+{/if}
 
-<!-- Request password reset form -->
-{#if $show_forgot_password_request_form} <ResetPasswordForm /> {/if}
+{#if is_show_signup_success_notificaion}
+    <Notification success={true}>
+        <div slot="message">
+            <p>Please check your email where I sent you a verification link.</p>
+            <br/>
+            <p>Thank you for the friendship!</p>
+        </div>
+    </Notification>
+{:else if is_show_reset_password_success_notification}
+    <Notification success={true}>
+        <div slot="message">
+            <p>Recovery link was sent to your email. Please click that link and follow the instructions.</p>
+            <br/>
+            <p>Thank you for the friendship!</p>
+        </div>
+    </Notification>
+{:else if is_show_profile_update_success}
+    <Notification success={true}>
+        <div slot="message">
+            <p>Profile is updated successfully!</p>
+            <p>Page will reload after a second or two.</p>
+            <br/>
+            <p>Thank you for the friendship!</p>
+        </div>
+    </Notification>
+{:else if is_show_request_email_change_success}
+    <Notification success={true}>
+        <div slot="message">
+            <p>Change of email request was sent successfully!</p>
+            <p>Please check your new email and confirm the change</p>
+            <br/>
+            <p>Thank you for the friendship!</p>
+        </div>
+    </Notification>
+{/if}
 
-<!-- Sign Up -->
-{#if $show_sign_up_form} <SignUpForm /> {/if}
-
-<!-- Sign Up -->
-{#if $show_profile_form} <ProfileForm /> {/if}
+{#if $selected_drop_down_menu === "login"}
+    <LoginForm on:close={oncloseLoginForm}/>
+{:else if $selected_drop_down_menu === "signup"}
+    <SignUpForm on:close={onCloseSignUp}/>
+{:else if $selected_drop_down_menu === "profile"}
+    <ProfileForm
+        on:close={onCloseProfileForm}
+        user={$current_user}
+    />
+{/if}
 
 <main>
-    <NavBar />
-    <div class="content"><slot /></div>
-    <Footer />
+    <NavBar/>
+    <slot/>
+    <Footer/>
 </main>
 
 <style lang="postcss">
     main {
         display: grid;
-        margin: 0 20%;
-        grid-template-columns: 1;
-        grid-template-rows: auto;
-        /* font-family: "Rajdhani", sans-serif; */
+        grid-template-rows: repeat(3, auto);
         font-family: poppins, sans-serif;
-        font-weight: 300;
-        box-sizing: border-box;
+        width: 52rem; 
+        margin: auto;
     }
-
-    .content {
-        margin-top: 2em;
-        z-index: 0;
-    }
-
-    @media screen and (max-width: 1290px) {
-        main { margin: 0 10%; }
-    }
-
-    @media screen and (max-width: 850px) {
-        main { margin: 0 2%; }
-    }
-
-    @media screen and (max-width: 650px) {
-        main { margin: 0; }
+    @media (max-width: 52rem) {
+        main { width: 100%; }
     }
 </style>

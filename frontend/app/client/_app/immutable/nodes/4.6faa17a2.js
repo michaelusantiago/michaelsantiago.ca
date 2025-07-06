@@ -1,0 +1,1 @@
+import{s as a,R as s,d as n,w as e}from"../chunks/scheduler.22c66fb6.js";import{S as c,i as d}from"../chunks/index.94eb7729.js";function r(o){return{c(){this.h()},l(t){s("svelte-pov2dp",document.head).forEach(n),this.h()},h(){document.title="Background - Michael Santiago"},m:e,p:e,i:e,o:e,d:e}}class m extends c{constructor(t){super(),d(this,t,null,r,a,{})}}export{m as component};

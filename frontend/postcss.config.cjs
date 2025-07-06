@@ -1,23 +1,13 @@
-module.exports = {
-  plugins: {
-    "postcss-import": {},
-    "tailwindcss/nesting": {},
-    tailwindcss: {},
-    autoprefixer: {},
-    "postcss-preset-env": {
-      stage: 1,
-      features: {
-        'nesting-rules': false 
-      },
-    },
-  },
+const postcssJitProps = require('postcss-jit-props');
+const OpenProps = require('open-props');
+
+const config = {
+    plugins: [
+        postcssJitProps(OpenProps),
+        require('postcss-nested'),
+        require('postcss-each'),
+        require('autoprefixer')
+    ]
 }
 
-// module.exports = {
-//   plugins: [
-//     require('autoprefixer'),
-//     require('postcss-preset-env')({
-//       stage: 1,
-//     })
-//   ]
-// }
+module.exports = config

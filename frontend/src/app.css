@@ -1,43 +1,53 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "./preflight.css";
+@import "remixicon/fonts/remixicon.css";
 
-/* @custom-selector :--heading h1, h2, h3, h4, h5, h6;
-
-:--heading {
-    font-size: 1.5rem;
-} */
-
-html { scroll-behavior: smooth; }
-
-:root {
-    --theme-bg: #FFF;
-    --navbar-bg: #FFF;
+html {
+    scroll-behavior: smooth;
+    font-family: Arial;
 }
 
-body { background-color: var(--theme-bg); }
+/* GLOBAL */
+a, a:visited, a:hover, a:active {
+    text-decoration: none;
+    color: inherit;
+}
 
-/* It's important that this come's first before dark-theme declaration below since page start at light
- * then just toggle on and off in dark
- */
+button {
+    cursor: pointer;
+}
+
+
+button:active {
+    outline: none;
+}
+
+button:focus-visible {
+    outline: 1px solid inherit;
+}
+/* button:hover {
+    outline: 1px solid inherit;
+} */
+
+/* button:hover {
+    outline: none;
+} */
+
+button:focus:not(:focus-visible) {
+    outline: none;
+}
+
+textarea::placeholder { font-weight: 100; }
+
+/* THEME */
 .light-theme {
     background-color: white;
-    /* transition: background-color ease-in 0.3s; */
     color: black;
-    .modal-window, textarea, input { color: black; }
+    textarea, input { color: black; }
     nav {
-        /* background-image: linear-gradient(#BEE1FF, #33A2FFDD); */
-        /* background-image: linear-gradient(#F4F6F7, #E6E8E9DD); */
-        /* background-image: linear-gradient(#F4F6F7, #D8D8DCDD); */
-        /* background-image: linear-gradient(#F4F6F7, #C2C5C6DD); */
         color: #222;
-        /* box-shadow: 0 3.4px 6.3px rgba(50, 50, 50, 0.09), 0 7px 10px rgba(50, 50, 50, 0.09); */
     }
     nav .me {
-        border-top: dashed 1px darkgrey;
-        border-bottom: dashed 1px darkgrey;
-        font-family: "system-ui", sans-serif;
-        background: linear-gradient(90deg, blue, rgb(242, 242, 242), blue);
+        background: linear-gradient(90deg, indigo, rgb(242, 242, 242), indigo);
     }
     nav a:hover, 
     nav a:focus,
@@ -56,18 +66,28 @@ body { background-color: var(--theme-bg); }
         background-color: white;
         color: black;
     }
+
+    .friends-list {
+        background-color: white;
+        h3 { background-color: whitesmoke; }
+    }
+
     textarea::placeholder { color: green }
+
+
+    footer {
+        ul li { color: var(--blue-7); }
+    }
 }
 
 .dark-theme {
     background-color: black;
     color: white;
-    .modal-window, textarea, input { color: black; }
+    button { color: white; }
+    textarea, input { color: black; }
     nav { color: white; }
+    .links i { color: white; }
     nav .me {
-        border-top: dashed 1px cadetblue;
-        border-bottom: dashed 1px cadetblue;
-        font-family: "system-ui", sans-serif;
         background: linear-gradient(90deg, gold, rgb(55, 55, 55), gold);
     }
     nav a:hover,
@@ -90,10 +110,18 @@ body { background-color: var(--theme-bg); }
         color: white;
     }
 
+    .friends-list {
+        background-color: black;
+        h3 { background-color: #222; }
+    }
+
     textarea::placeholder { color: gold }
+
+    footer {
+        ul li { color: gold; }
+    }
 }
 
-textarea::placeholder { font-weight: 100; }
 
 /** CUSTOM SCROLLBAR */
 ::-webkit-scrollbar { width: 10px; }

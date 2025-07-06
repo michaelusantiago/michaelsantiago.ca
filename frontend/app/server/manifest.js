@@ -1,71 +1,76 @@
-const manifest = {
+const manifest = (() => {
+function __memo(fn) {
+	let value;
+	return () => value ??= (value = fn());
+}
+
+return {
 	appDir: "_app",
 	appPath: "_app",
-	assets: new Set(["favicon.png","me.jpg"]),
+	assets: new Set(["favicon.png","me.jpg","pos22 app.png","pos22 manager.png","pos22 website.png"]),
 	mimeTypes: {".png":"image/png",".jpg":"image/jpeg"},
 	_: {
-		entry: {"file":"_app/immutable/start-9b69e1ba.js","imports":["_app/immutable/start-9b69e1ba.js","_app/immutable/chunks/index-37f1e841.js","_app/immutable/chunks/parse-c28e5ac2.js","_app/immutable/chunks/env-public-1b9b25bc.js"],"stylesheets":[],"fonts":[]},
+		client: {"start":"_app/immutable/entry/start.53b5ed10.js","app":"_app/immutable/entry/app.2d4af0be.js","imports":["_app/immutable/entry/start.53b5ed10.js","_app/immutable/chunks/scheduler.22c66fb6.js","_app/immutable/chunks/singletons.b2371634.js","_app/immutable/chunks/index.80348aca.js","_app/immutable/chunks/parse.bee59afc.js","_app/immutable/entry/app.2d4af0be.js","_app/immutable/chunks/scheduler.22c66fb6.js","_app/immutable/chunks/index.94eb7729.js"],"stylesheets":[],"fonts":[]},
 		nodes: [
-			() => import('./chunks/0-8ca69d15.js'),
-			() => import('./chunks/1-4d26add2.js'),
-			() => import('./chunks/2-4990c4fe.js'),
-			() => import('./chunks/3-8b24772a.js'),
-			() => import('./chunks/4-a00ed99e.js'),
-			() => import('./chunks/5-a2c7a7c0.js'),
-			() => import('./chunks/6-bfe83fa7.js'),
-			() => import('./chunks/7-af618a3f.js'),
-			() => import('./chunks/8-7dc8cff5.js'),
-			() => import('./chunks/9-67a4732d.js'),
-			() => import('./chunks/10-47f1bff2.js')
+			__memo(() => import('./chunks/0-a922de11.js')),
+			__memo(() => import('./chunks/1-e9a402e0.js')),
+			__memo(() => import('./chunks/2-ba088ab1.js')),
+			__memo(() => import('./chunks/3-25ca7735.js')),
+			__memo(() => import('./chunks/4-11a5e79f.js')),
+			__memo(() => import('./chunks/5-57c049d3.js')),
+			__memo(() => import('./chunks/6-8ec75868.js')),
+			__memo(() => import('./chunks/7-f9aa71b9.js')),
+			__memo(() => import('./chunks/8-3ee496cf.js')),
+			__memo(() => import('./chunks/9-54e92cf2.js'))
 		],
 		routes: [
 			{
-				id: "/",
-				pattern: /^\/$/,
+				id: "/(home)",
+				pattern: /^\/?$/,
 				params: [],
-				page: { layouts: [0], errors: [1], leaf: 4 },
+				page: { layouts: [0,], errors: [1,], leaf: 3 },
 				endpoint: null
 			},
 			{
-				id: "/about",
-				pattern: /^\/about\/?$/,
+				id: "/background",
+				pattern: /^\/background\/?$/,
 				params: [],
-				page: { layouts: [0,2], errors: [1,,], leaf: 5 },
+				page: { layouts: [0,2,], errors: [1,,], leaf: 4 },
 				endpoint: null
 			},
 			{
-				id: "/about/biography",
-				pattern: /^\/about\/biography\/?$/,
+				id: "/background/biography",
+				pattern: /^\/background\/biography\/?$/,
 				params: [],
-				page: { layouts: [0,2], errors: [1,,], leaf: 6 },
+				page: { layouts: [0,2,], errors: [1,,], leaf: 5 },
 				endpoint: null
 			},
 			{
-				id: "/about/education",
-				pattern: /^\/about\/education\/?$/,
+				id: "/background/education",
+				pattern: /^\/background\/education\/?$/,
 				params: [],
-				page: { layouts: [0,2], errors: [1,,], leaf: 7 },
+				page: { layouts: [0,2,], errors: [1,,], leaf: 6 },
 				endpoint: null
 			},
 			{
-				id: "/about/projects",
-				pattern: /^\/about\/projects\/?$/,
+				id: "/background/workexperience",
+				pattern: /^\/background\/workexperience\/?$/,
 				params: [],
-				page: { layouts: [0,2], errors: [1,,], leaf: 8 },
-				endpoint: null
-			},
-			{
-				id: "/about/workexperience",
-				pattern: /^\/about\/workexperience\/?$/,
-				params: [],
-				page: { layouts: [0,2], errors: [1,,], leaf: 9 },
+				page: { layouts: [0,2,], errors: [1,,], leaf: 7 },
 				endpoint: null
 			},
 			{
 				id: "/chat",
 				pattern: /^\/chat\/?$/,
 				params: [],
-				page: { layouts: [0,3], errors: [1,,], leaf: 10 },
+				page: { layouts: [0,], errors: [1,], leaf: 8 },
+				endpoint: null
+			},
+			{
+				id: "/projects",
+				pattern: /^\/projects\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 9 },
 				endpoint: null
 			}
 		],
@@ -74,7 +79,10 @@ const manifest = {
 			return {  };
 		}
 	}
-};
+}
+})();
 
-export { manifest };
+const prerendered = new Set([]);
+
+export { manifest, prerendered };
 //# sourceMappingURL=manifest.js.map
