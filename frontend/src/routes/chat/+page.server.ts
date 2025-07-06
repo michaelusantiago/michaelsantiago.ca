@@ -1,5 +1,5 @@
-import type { PageServerLoad, Actions } from './$types';
-import { serializeNonPOJ } from '$lib/utilities';
+import type { Actions } from './$types';
+import * as db from '$lib/Database'
 
 export const actions: Actions = {
     /** Send chat */
@@ -12,7 +12,7 @@ export const actions: Actions = {
          *  Lets get the id of the admin
          */
         if (locals.user.role === 1) {
-            const admin = await locals.pb.collection('users').getFirstListItem('role=0');
+            const admin = await db.getAdmin()
             to_id = admin?.id;
         }
 
@@ -23,16 +23,11 @@ export const actions: Actions = {
         }
 
         try {
-            const record = await locals.pb.collection('chats').create(data);
+            await db.sendMessage(locals.pb, data)
 
-            const chats = serializeNonPOJ(await locals.pb.collection('chats')
-                .getFullList(200, {
-                    filter: `(from = "${locals.user.id}" && to = "${to_id}") || (from = "${to_id}" && to = "${locals.user.id}")`,
-                    sort: '+created'
-                })
-            );
+            const { chats } = await db.getChats(locals.user.id, String(to_id))
 
-            return ({ success: true, chats });
+            return ({ success: true, chats })
         } catch (error: any) {
             console.log(error)
             return ({ success: false })
@@ -42,21 +37,15 @@ export const actions: Actions = {
     /** Get Chat by user_id */
     get: async ({ request, locals }) => {
         const formData = await request.formData();
-        const friend_id = formData.get("friend_id");
+        const friend_id = String(formData.get("friend_id"));
 
-        try {
-            /** Get Chats */
-            const chats = serializeNonPOJ(await locals.pb.collection('chats')
-                .getFullList(200, {
-                    filter: `(from = "${locals.user.id}" && to = "${friend_id}") || (from = "${friend_id}" && to = "${locals.user.id}")`,
-                    sort: '+created'
-                })
-            );
+        const result = await db.getChats(locals.user.id, friend_id)
 
-            return ({ success: true, chats });
-        } catch (err: any) {
-            console.log(err)
-            return ({ error: true, message: err.message })
+        if (result.success)
+            return ({ chats: result.chats })
+        else {
+            console.log(result.error)
+            return ({ result })
         }
     }
 }

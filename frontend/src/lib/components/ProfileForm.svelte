@@ -1,36 +1,105 @@
 <script lang="ts">
-    import ModalWindow from "$lib/components/ModalWindow.svelte";
-    import Notification from "$lib/components/Notification.svelte";
-    import Container from "$lib/components/Container.svelte";
-    import { enhance } from '$app/forms';
-    import Fa from "svelte-fa";
-    import { faExclamationTriangle, faSpinner } from "@fortawesome/free-solid-svg-icons";
-    import {
-        user, show_profile_form, show_notification,
-        show_forgot_password_request_form
-    } from "$lib/stores/globalstore";
+    import Container from "./Container.svelte"
+    import { enhance } from "$app/forms"
+    import { createEventDispatcher, onDestroy } from "svelte"
+    import type { SubmitFunction } from "@sveltejs/kit"
+    import { fly } from "svelte/transition"
+    import { Circle } from "svelte-loading-spinners";
 
-    let loading = false;
-    let profile_update_result: any = null;
-    let profile_update_error: any = null;
+    export let user: any
 
-    const onChangeInput = async (e: Event) => profile_update_error = null;
+    let modal: HTMLDivElement
+    let first_name: HTMLInputElement
+    let last_name: HTMLInputElement
+    let current_password: HTMLInputElement
+    let new_password: HTMLInputElement
+    let confirm_new_password: HTMLInputElement
+    let is_updating = false
+    let profile_update_result: any = null
+    let profile_update_error: any = null
+
+    const dispatch = createEventDispatcher()
+
+    const onSubmitForm: SubmitFunction = async () => {
+        is_updating = true;
+        return async ({ result }) => {
+            is_updating = false;
+            profile_update_result = result;
+            if (profile_update_result?.data?.success) {
+                if (profile_update_result?.data?.change_email)
+                    dispatch('close', { success: true, change_email: true })
+                else
+                    dispatch('close', { success: true })
+            } else {
+                is_updating = false;
+                profile_update_error = profile_update_result?.data?.message?.data;
+                console.log(profile_update_result)
+            }
+        }
+    }
+
+    $: {
+        if (profile_update_error?.first_name) first_name.focus()
+        else if (profile_update_error?.last_name) last_name.focus()
+        else if (profile_update_error?.oldPassword) current_password.focus()
+        else if (profile_update_error?.password) new_password.focus()
+        else if (profile_update_error?.passwordConfirm) confirm_new_password.focus()
+    }
+
+    const onClickWindowFrame = (e: Event) => {
+        const window_frame = (e.target as HTMLDivElement).closest('#window-frame')
+        if (window_frame) dispatch('close')
+    }
+
+	const handle_keydown = (e: any) => {
+		if (e.key === 'Escape') {
+            dispatch('close')
+			return;
+		}
+
+		if (e.key === 'Tab') {
+			// trap focus
+			const nodes = modal.querySelectorAll('*');
+			const tabbable = Array.from(nodes).filter((n: any) => (n.tabIndex >= 0) && (!n.hidden));
+
+			let index = tabbable.indexOf(document.activeElement as HTMLElement);
+			if (index === -1 && e.shiftKey) index = 0;
+
+			index += tabbable.length + (e.shiftKey ? -1 : 1);
+			index %= tabbable.length;
+
+			(tabbable[index] as HTMLElement).focus();
+			e.preventDefault();
+		}
+	}
+
+    const previously_focused = typeof document !== 'undefined' && document.activeElement;
+
+	if (previously_focused) {
+		onDestroy(() => {
+			(previously_focused as HTMLElement).focus();
+		});
+	}
+
+    const onChangeInput = () => { }
 </script>
 
-<!-- Notification -->
-{#if $show_notification}
-    <Notification success={true}>
-        <div slot="message">
-            Profile successfully updated!
-        </div>
-    </Notification>
-{/if}
+<svelte:window on:keydown={handle_keydown}/>
 
 <main>
-    <ModalWindow on:close={() => { $show_profile_form = false; }}>
-        <div class="p-3">
-            <h1 class="font-bold text-2xl py-3">Profile</h1>
-            <div class="flex flex-col gap-1">
+    <div 
+        id="window-frame"
+        on:click|self={onClickWindowFrame}
+        bind:this={modal}
+        on:keydown={() => { }}
+        tabindex="0"
+        role="button">
+        <div
+            class="inner-window"
+            in:fly="{{x: 22, duration: 300}}"
+            out:fly="{{x: 82, duration: 200}}">
+            <h1 class="head-title">Profile</h1>
+            <div>
                 <!-- Basic Info -->
                 <Container
                     header_title="Basic Info"
@@ -43,44 +112,41 @@
                     --icon-position="30%"
                     --icon-color="black"
                     --container-height="400px">
-                    <form class="overflow-y-auto" method="POST" use:enhance = {
-                        ({ form, data, action }) => {
-                            loading = true;
-                            return async ({ result, update }) => {
-                                loading = false;
-                                profile_update_result = result;
-                                if (profile_update_result?.data?.success) {
-                                    $show_profile_form = false;
-                                    $show_notification = true;
-                                } else profile_update_error = profile_update_result?.data;
-                            }
-                        }}>
+                    <form method="POST" use:enhance = {onSubmitForm}>
                         <label>
                             First Name
                             <input
                                 required
+                                bind:this={first_name}
                                 on:change={onChangeInput}
                                 name="first_name"
                                 type="text"
-                                value={$user.first_name}
+                                value={user.first_name}
                             />
+                            {#if profile_update_error?.first_name}
+                                <span class="error">{profile_update_error?.first_name.message}</span>
+                            {/if}
                         </label>
                         <label>
                             Last Name
                             <input
                                 required
+                                bind:this={last_name}
                                 on:change={onChangeInput}
                                 name="last_name"
                                 type="text"
-                                value={$user.last_name}
+                                value={user.last_name}
                             />
+                            {#if profile_update_error?.last_name}
+                                <span class="error">{profile_update_error?.last_name.message}</span>
+                            {/if}
                         </label>
                         <label>
                             Gender
                             <select
                                 on:change={onChangeInput}
                                 name="gender"
-                                value={$user.gender ?? ""}>
+                                value={user.gender ?? ""}>
                                 <option value="" hidden disabled>- select -</option>
                                 <option value="Masculine">Masculine</option>
                                 <option value="Feminine">Feminine</option>
@@ -93,25 +159,24 @@
                                 id="birth_date"
                                 name="birth_date"
                                 type="date"
-                                value={new Date($user.birth_date).toLocaleString("en-CA").split(',')[0]}
+                                value={new Date(user.birth_date).toLocaleString("en-CA").split(',')[0]}
                             />
                         </label>
 
                         <div class="group-btn">
                             <button
-                                formaction="/?/update_basic_info"
-                                class="bg-blue-500 px-10 py-2 rounded-md">
-                                <span class="flex gap-2 items-center">
+                                type="submit"
+                                formaction="/?/update_basic_info">
+                                <span>
                                     Save Changes
-                                    {#if loading}
-                                        <Fa icon={faSpinner} pulse/>
+                                    {#if is_updating}
+                                        <Circle size="15" color="#FFF" unit="px" duration="1s"/>
                                     {/if}
                                 </span>
                             </button>
                             <button
                                 type="reset"
-                                class="bg-green-500 px-10 py-2 rounded-md"
-                                on:click={() => { $show_profile_form = false }}>
+                                on:click={() => { dispatch('close')}}>
                                 Close
                             </button>
                         </div>
@@ -129,79 +194,67 @@
                     --icon-position="30%"
                     --icon-color="black"
                     --container-height="350px">
-                    <form class="overflow-y-auto" method="POST" use:enhance = {
-                        ({ form, data, action }) => {
-                            loading = true;
-                            return async ({ result, update }) => {
-                                loading = false;
-                                profile_update_result = result;
-                                if (profile_update_result?.data?.success) {
-                                    $show_profile_form = false;
-                                    $show_notification = true;
-                                } else profile_update_error = profile_update_result?.data;
-                            }
-                        }}>
+                    <form method="POST" use:enhance = {onSubmitForm}>
                         <label>
                             Current Password
                             <input
                                 required
+                                bind:this={current_password}
                                 on:change={onChangeInput}
-                                name="currentPassword"
+                                name="current_password"
                                 type="password"
                             />
+                            {#if profile_update_error?.oldPassword}
+                                <span class="error">{profile_update_error?.oldPassword.message}</span>
+                            {/if}
                         </label>
                         <label>
                             New Password
                             <input
                                 required
+                                bind:this={new_password}
                                 on:change={onChangeInput}
                                 name="password"
                                 type="password"
                             />
+                            {#if profile_update_error?.password}
+                                <span class="error">{profile_update_error?.password.message}</span>
+                            {/if}
                         </label>
                         <label>
                             Confirm Password
                             <input
                                 required
+                                bind:this={confirm_new_password}
                                 on:change={onChangeInput}
-                                name="passwordConfirm"
+                                name="confirm_password"
                                 type="password"
                             />
+                            {#if profile_update_error?.passwordConfirm}
+                                <span class="error">{profile_update_error?.passwordConfirm.message}</span>
+                            {/if}
                         </label>
 
-                        <div class="flex flex-col-reverse">
+                        <div>
                             <!-- Action Buttons -->
                             <div class="group-btn">
                                 <button
-                                    formaction="/?/change_password"
-                                    class="bg-blue-500 px-10 py-2 rounded-md">
-                                    <span class="flex gap-2 items-center">
+                                    type="submit"
+                                    formaction="/?/change_password">
+                                    <span>
                                         Save Changes
-                                        {#if loading}
-                                            <Fa icon={faSpinner} pulse/>
+                                        {#if is_updating}
+                                            <Circle size="15" color="#FFF" unit="px" duration="1s"/>
                                         {/if}
                                     </span>
                                 </button>
                                 <button
                                     type="reset"
                                     formaction="/?/close"
-                                    class="bg-green-500 px-10 py-2 rounded-md"
-                                    on:click={() => { $show_profile_form = false }}>
+                                    on:click={() => { dispatch('close')}}>
                                     Close
                                 </button>
                             </div>
-
-                            <!-- Request password reset -->
-                            <button
-                                type="reset"
-                                formaction="/?/close"
-                                class="pl-2 text-left"
-                                on:click={() => {
-                                    $show_profile_form = false
-                                    $show_forgot_password_request_form = true
-                                }}>
-                                Forgot password?
-                            </button>
                         </div>
                     </form>
                 </Container>
@@ -217,20 +270,8 @@
                     --icon-position="30%"
                     --icon-color="black"
                     --container-height="270px">
-
-                    <form class="overflow-y-auto" method="POST" use:enhance = {
-                        ({ form, data, action }) => {
-                            loading = true;
-                            return async ({ result, update }) => {
-                                loading = false;
-                                profile_update_result = result;
-                                if (profile_update_result?.data?.success) {
-                                    $show_profile_form = false;
-                                    $show_notification = true;
-                                } else profile_update_error = profile_update_result?.data;
-                            }
-                        }}>
-                        <h1 class="p-2">{$user.email}</h1>
+                    <form method="POST" use:enhance = { onSubmitForm }>
+                        <h1 class="user-email">{user.email}</h1>
                         <label>
                             Current Password
                             <input
@@ -239,6 +280,12 @@
                                 name="password"
                                 type="password"
                             />
+                            {#if profile_update_error?.password}
+                                <span class="error">{profile_update_error?.password.message}</span>
+                            {/if}
+                            {#if profile_update_result?.data?.message?.code === 400}
+                                <span class="error">{profile_update_result?.data?.message?.message}</span>
+                            {/if}
                         </label>
                         <label>
                             New Email
@@ -248,83 +295,135 @@
                                 name="newEmail"
                                 type="email"
                             />
+                            {#if profile_update_error?.newEmail}
+                                <span class="error">{profile_update_error?.newEmail.message}</span>
+                            {/if}
                         </label>
 
                         <div class="group-btn">
                             <button
-                                formaction="/?/change_email"
-                                class="bg-blue-500 px-10 py-2 rounded-md">
-                                <span class="flex gap-2 items-center">
+                                type="submit"
+                                formaction="/?/change_email">
+                                <span>
                                     Save Changes
-                                    {#if loading}
-                                        <Fa icon={faSpinner} pulse/>
+                                    {#if is_updating}
+                                        <Circle size="15" color="#FFF" unit="px" duration="1s"/>
                                     {/if}
                                 </span>
                             </button>
                             <button
+                                type="reset"
                                 formaction="/?/close"
-                                class="bg-green-500 px-10 py-2 rounded-md"
-                                on:click={() => { $show_profile_form = false }}>
+                                on:click={() => { dispatch('close') }}>
                                 Close
                             </button>
                         </div>
                     </form>
                 </Container>
             </div>
-
-            <!-- Alert -->
-            {#if profile_update_error }
-                {@const error_fields = Object.keys(profile_update_error?.message.data)}
-                <div class="text-sm bg-red-600 w-full p-4 mt-2 rounded-md">
-                    <div class="flex items-center py-2">
-                        <Fa icon={faExclamationTriangle}/>
-                        <span class="font-bold">{profile_update_error?.message.message}</span>
-                    </div>
-                    <ul class="flex flex-col gap-3">
-                        {#each error_fields as error_field}
-                            <li>
-                                <div class="bg-gray-400 rounded-md px-2 py-1 w-fit">{error_field}</div>
-                                <div>- {profile_update_error?.message.data[error_field].message}</div>
-                            </li>
-                        {/each}
-                    </ul>
-                </div>
-            {/if}
-        </div>
-    </ModalWindow>
+        </div> 
+    </div>
 </main>
 
 <style lang="postcss">
-    form {
+    :root {
         --bg-color: white;
-        display: flex;
-        flex-direction: column;
-        padding: 10px;
-        gap: 5px;
-        label {
-            text-transform: uppercase;
-            font-size: small;
-            background-color: var(--bg-color);
-            padding: 10px 20px;
-            border: whitesmoke solid 3.5px;
-            border-radius: 0.375rem;
-            color: gray;
-        }
-        label:focus-within { border-color: lightgray; }
-        input, select {
-            width: 100%;
-            font-size: medium;
-            outline: none;
-        }
-        input:autofill {
-            box-shadow: 0 0 0px 1000px var(--bg-color) inset;
-        }
     }
-
-    .group-btn {
+    #window-frame {
         display: flex;
-        justify-content: right;
-        margin-top: 1.5rem;
-        gap: 5px;
+        position: fixed;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 2;
+        color: black;;
+        transition: background-color 0.8s ease-out;
+    }
+    .inner-window {
+        display: flex;
+        position: absolute;
+        flex-direction: column;
+        box-sizing: border-box;
+        min-width: 400px;
+        max-width: 400px;
+        padding: 20px 25px;
+        border: solid 1px lightblue;
+        background-color: whitesmoke;
+        box-shadow: var(--shadow-3);
+        right: 0;
+        top: 0;
+        height: 100%;
+        overflow-y: auto;
+        .head-title {
+            font-weight: bold;
+            font-size: x-large;
+            padding: 2px;
+            margin-block-end: 12px;
+        }
+        form {
+            label {
+                display: block;
+                text-transform: uppercase;
+                font-size: small;
+                background-color: var(--bg-color);
+                padding: 10px 15px;
+                border: whitesmoke solid 3.5px;
+                border-radius: 0.375rem;
+                color: gray;
+            }
+            label:focus-within { border-color: lightgray; }
+            input, select {
+                width: 100%;
+                font-size: medium;
+                outline: none;
+                padding-inline: 0;
+                font-family: inherit;
+            }
+            input:autofill {
+                box-shadow: 0 0 0px 1000px var(--bg-color) inset;
+            }
+
+            .group-btn {
+                display: flex;
+                justify-content: right;
+                margin-top: 1.5rem;
+                gap: 5px;
+                button { 
+                    padding: 0.5rem 1rem;
+                    border-radius: 5px;
+                    font-size: 1rem;
+                    padding: 0.7rem 2rem;
+                    cursor: pointer;
+                    color: black;
+                    &:hover, &:active, &:focus {
+                        background-color: rgb(199, 202, 193);
+                    }
+                    span {
+                        display: flex;
+                        gap: 5px;
+                    }
+                }
+                button[type="submit"] {
+                    background-color: var(--blue-6);
+                    &:hover { background-color: var(--blue-7); }
+                }
+                button[type="reset"] {
+                    background-color: var(--green-6);
+                    &:hover { background-color: var(--green-7); }
+                }
+            }
+            .user-email { padding: 10px 5px; }
+            .error {
+                font-size: small;
+                text-transform: lowercase;
+                display: flex;
+                color: red;
+                padding: 2px 6px;
+                margin-top: 5px;
+                box-sizing: border-box;
+            }
+        }
     }
 </style>

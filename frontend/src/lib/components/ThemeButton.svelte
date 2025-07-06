@@ -1,25 +1,10 @@
 <script lang="ts">
-    import Fa from 'svelte-fa';
-    import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
-    import { show_dropdown_menu, theme } from '$lib/stores/globalstore';
-
-    let theme_icon = faSun;
+    import { theme } from "@lib/store";
+    import { onMount } from "svelte";
+    
     let animate = false;
 
-    $: {
-        theme_icon = ($theme === 'dark') ? faMoon : faSun;
-    }
-
-    const onChangeTheme = () => {
-        /** Animate theme icon */
-        animate = true;
-        setTimeout(() => animate = false, 1000);
-        $theme = ($theme === 'dark') ? 'light' : 'dark';
-        theme_icon = ($theme === 'dark') ? faMoon : faSun;
-
-        // this is no longer effective
-        // document.body.classList.toggle('dark-theme');
-
+    function setTheme() {
         if ($theme === 'dark') {
             if (document.body.classList.contains('light-theme'))
                 document.body.classList.remove(`light-theme`);
@@ -30,35 +15,65 @@
             document.body.classList.add('light-theme');
         }
     }
+
+    onMount(() => { setTheme() })
+
+    const onChangeTheme = () => {
+        /** Animate theme icon */
+        animate = true;
+        setTimeout(() => animate = false, 1000);
+        $theme = ($theme === 'dark') ? 'light' : 'dark';
+        setTheme()
+    }
 </script>
 
 <main>
     <button
-        on:focus={() => $show_dropdown_menu = false}
         on:click={onChangeTheme} title="switch theme">
-        <!-- <div class="icon-wrapper"> -->
-            <span class:animate={animate} class="icon"><Fa icon={theme_icon}/></span>
-            <!-- <span class:animate={animate} class="icon">&#9728</span> -->
-        <!-- </div> -->
+        <span class:animate={animate} class="icon">
+            {#if $theme === 'dark'}
+                <i class="ri-moon-clear-fill"/>
+            {:else}
+                <i class="ri-sun-fill black"/>
+            {/if}
+        </span>
     </button>
 </main>
 
 <style lang="postcss">
+    main:active button {
+        outline: none;
+    }
+
+    main:focus-within {
+        button {
+            outline: solid 1px inherit;
+        }
+    }
+
     button {
         display: flex;
         justify-content: center;
         align-items: center;
         margin: auto;
+        padding: 0;
+        border-radius: 100%;
+        background-color: transparent;
+    }
+
+    .black {
+        color: black;
     }
 
     button .icon {
-        color: rgb(255, 255, 0);
+        color: rgb(255, 255, 255);
         display: flex;
         justify-content: center;
         align-items: center;
         height: 32px;
         width: 32px;
         border-radius: 100%;
+        font-size: 1.25rem;
         transition: background-color 0.5s ease-in-out; 
     }
     button .icon:hover {

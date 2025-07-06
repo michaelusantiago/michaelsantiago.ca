@@ -1,56 +1,67 @@
 <script lang="ts">
-    import Fa from 'svelte-fa';
-    import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
-    import { user, show_dropdown_menu, show_login_form, show_sign_up_form, show_profile_form } from '$lib/stores/globalstore';
+    import { current_user, selected_drop_down_menu } from "@lib/store"
+    import { Circle } from "svelte-loading-spinners"
+    import { enhance } from "$app/forms"
+
+    let is_dropdown_menu = false
+    let is_logging_out = false
 
     const handle_keydown = (e: any) => {
-        if (e.key !== 'Tab' && e.key !== 'Shift' && e.key !== ' ') $show_dropdown_menu = false;
+        if (e.key !== 'Tab' && e.key !== 'Shift' && e.key !== ' ') is_dropdown_menu = false;
     }
 
-    const onclickLogin = (e: any) => {
-        $show_dropdown_menu = false;
-        $show_login_form = true;
+    const onclickLogin = () => {
+        is_dropdown_menu = false
+        selected_drop_down_menu.set('login')
     }
 
     const onClickSignUp = (e: any) => {
-        $show_dropdown_menu = false;
-        $show_sign_up_form = true;
+        is_dropdown_menu = false
+        selected_drop_down_menu.set('signup')
     }
 
     const onClickProfile = (e: any) => {
-        $show_dropdown_menu = false;
-        $show_profile_form = true;
+        is_dropdown_menu = false
+        selected_drop_down_menu.set('profile')
     }
 </script> 
 
 <svelte:window on:keydown={handle_keydown}/>
 
 <main
-    on:focus={() => $show_dropdown_menu = true}
-    on:mouseover={() => $show_dropdown_menu = true}
-    on:mouseleave={() => $show_dropdown_menu = false}>
-    <button on:focus={() => $show_dropdown_menu = true}>
-        <span class="icon"><Fa icon={faCaretDown}/></span>
+    on:focus={() => is_dropdown_menu = true}
+    on:mouseover={() => is_dropdown_menu = true}
+    on:mouseleave={() => is_dropdown_menu = false}>
+    <button on:focus={() => is_dropdown_menu = true}>
+        <span class="icon"><i class="ri-arrow-down-s-fill"/></span>
     </button>
-    {#if $show_dropdown_menu}
-        {#if !$user}
+    {#if is_dropdown_menu}
+        {#if !$current_user}
             <div class="dd-menu">
                 <button on:click={onclickLogin}>Login</button>
                 <button
                     title="If you do, you can chat with me privately and securely. Just you and me, nothing in between."
-                    on:blur={() => $show_dropdown_menu = false}
+                    on:blur={() => is_dropdown_menu = false}
                     on:click={onClickSignUp}>
                     Friend Me
                 </button>
             </div>
         {:else}
             <div class="dd-menu">
-                <form method="POST">
-                    <button formaction="/?/log_out">Log Out</button>
+                <form action="/?/log_out" method="POST">
+                    <button
+                        type="submit"
+                        on:click|once={() => is_logging_out = true}>
+                        <span>Log Out</span>
+                        {#if is_logging_out}
+                            <Circle size="15" color="#FFF" unit="px" duration="1s"/>
+                        {/if}
+                    </button>
                 </form>
                 <button
+                    disabled={is_logging_out}
                     title="Update your profile"
-                    on:blur={() => $show_dropdown_menu = false}
+                    on:blur={() => is_dropdown_menu = false}
                     on:click={onClickProfile}>
                     Profile
                 </button>
@@ -60,21 +71,34 @@
 </main>
 
 <style lang="postcss">
+    button {
+        padding: 0;
+        background-color: transparent;
+        border-radius: 100%;
+    }
     .dd-menu {
-        form button { width: 100%; }
         button {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
             text-align: left;
             padding: 3px 7px;
+            font-size: 1rem;
+            border-radius: 0;
+            &:disabled {
+                color: lightgray;
+                opacity: 0.3;
+            }
         }
         display: flex;
         flex-direction: column;
         position: absolute;
         padding: 17px;
-        width: 12rem; 
-        right: 2rem;
+        width: 10rem; 
+        right: 1rem;
+        gap: 10px;
         border-bottom-left-radius: 12px;
         border-bottom-right-radius: 12px;
-        font-size: large;
         box-shadow: 0 3.4px 6.3px rgba(50, 50, 50, 0.09), 0 7px 10px rgba(50, 50, 50, 0.09);
         z-index: 13;
     }
@@ -87,6 +111,7 @@
         width: 32px;
         border-radius: 100%;
         transition: background-color 0.5s ease-in-out; 
+        font-size: 1.5rem;
     }
     button .icon:hover {
         background-color: rgba(169, 169, 169, 0.411);

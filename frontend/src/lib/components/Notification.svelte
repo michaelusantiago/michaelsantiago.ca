@@ -1,18 +1,16 @@
 <script lang='ts'>
-    import Fa from 'svelte-fa'
-    import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
     import { fly, fade } from 'svelte/transition'
     export let success: boolean;
 </script>
 
 <main>
     <div class="main" in:fly="{{ y: -50, duration: 500 }}" out:fade="{{ delay: 250, duration: 300 }}">
-        <div class="flex items-center">
-            <div class="flex-grow p-2"><slot name="message">No message</slot></div>
+        <div class="body-wrapper">
+            <div class="message"><slot name="message">No message</slot></div>
             {#if success}
-                <Fa icon={faCheckCircle} color="green"/>
+                <i class="green ri-checkbox-circle-fill"></i>
             {:else}
-                <Fa icon={faTimesCircle} color="red"/>
+                <i class="red ri-close-circle-fill"></i>
             {/if}
         </div>
     </div>
@@ -48,4 +46,15 @@
             0 100px 80px rgba(0, 0, 0, 0.12);
         z-index: 12;
     } 
+    .main .body-wrapper {
+        display: flex;
+        gap: 10px;
+        .message {
+            flex: 2;
+            margin: auto 0;
+        }
+        i { font-size: x-large; }
+    }
+    .green { color: var(--green-6); }
+    .red { color: var(--red-6); }
 </style>

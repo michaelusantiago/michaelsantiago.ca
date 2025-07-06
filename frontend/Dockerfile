@@ -1,11 +1,20 @@
-FROM node:18.12-alpine
+# FROM node:18.12-alpine
+FROM node:20-slim
 
-WORKDIR /usr/local/bin/michaelsantiago.ca
+# PNPM
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+WORKDIR /usr/local/bin/michaelsantiago.ph
 
 ADD app ./app
 COPY package*.json ./
+COPY pnpm-lock.yaml ./
 
-RUN npm ci
+RUN pnpm install
+
+# RUN npm ci
 
 EXPOSE 3000
 
