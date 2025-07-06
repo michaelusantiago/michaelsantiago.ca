@@ -33,7 +33,7 @@
 		"dotenv": "^16.3.1",
 		"eventsource": "^2.0.2",
 		"open-props": "^1.5.10",
-		"pocketbase": "^0.26.1",
+		"pocketbase": "^0.15.3",
 		"postcss": "^8.4.27",
 		"postcss-each": "^1.1.0",
 		"postcss-nested": "^6.0.1",

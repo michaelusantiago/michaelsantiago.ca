@@ -9,7 +9,43 @@
 
     <div class="work-experience-container">
         <h1>
-            Jr. Web Developer
+            Application Engineer
+            <span>Jul 2025 - Present</span>
+        </h1>
+        <h2>
+            <a href="https://www.palawanpawnshop.com" target="_blank" rel="noreferrer">Palawan Pawnshop</a>
+            <span>
+                Jewerly Pawning and Financial/Remittance Sevices
+            </span>
+        </h2>
+        <div class="details">
+            <ul>
+                <li>Develop/Maintain Applications</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="work-experience-container">
+        <h1>
+            Software Engineer
+            <span>Nov 2023 - Jun 2025</span>
+        </h1>
+        <h2>
+            <a href="https://www.palawanpawnshop.com" target="_blank" rel="noreferrer">Palawan Pawnshop</a>
+            <span>
+                Jewerly Pawning and Financial/Remittance Sevices
+            </span>
+        </h2>
+        <div class="details">
+            <ul>
+                <li>Develop/Maintain Applications</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="work-experience-container">
+        <h1>
+            Web Developer
             <span>Feb 06, 2023 - April 06, 2023</span>
         </h1>
         <h2>
